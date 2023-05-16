@@ -11,23 +11,7 @@ export const useTasks = () => {
 };
 
 export const TaskProvider = ({ children }) => {
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      title: "my first task",
-      description: "some task1 description",
-    },
-    {
-      id: 2,
-      title: "my second task",
-      description: "some task2 description",
-    },
-    {
-      id: 3,
-      title: "my third task",
-      description: "some task3 description",
-    },
-  ]);
+  const [tasks, setTasks] = useState([]);
 
   function createTask(title, description) {
     setTasks([
@@ -41,8 +25,16 @@ export const TaskProvider = ({ children }) => {
   }
 
   function deleteTask(id) {
-    // set tasks state to a new array of task with out the taks of the passed id
+    // set tasks state to a new array of task with out the task of the passed id
     setTasks([...tasks.filter((task) => task.id !== id)]);
+  }
+
+  function updateTask(id, updatedTask) {
+    setTasks([
+      ...tasks.map((task) =>
+        task.id === id ? { ...task, ...updatedTask } : task
+      ),
+    ]);
   }
 
   return (
@@ -56,6 +48,7 @@ export const TaskProvider = ({ children }) => {
         // or just (for short)
         createTask,
         deleteTask,
+        updateTask,
       }}
     >
       {children}
