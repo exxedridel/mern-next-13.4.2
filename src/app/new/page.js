@@ -2,59 +2,65 @@
 import { useEffect, useState } from "react";
 import { useTasks } from "@/context/TasksContext";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 
 export default function Page({ params }) {
-  const [task, setTask] = useState({
-    title: "",
-    description: "",
-  });
+  // removed task empty state, now called from useLocalstorage hook
   const { tasks, createTask, updateTask } = useTasks();
   const router = useRouter();
+  const { register, handleSubmit, setValue, formState: {errors} } = useForm();
 
-  function handleChange(e) {
-    setTask({ ...task, [e.target.name]: e.target.value });
-  }
+  // removed handleChange() not used in the useForm way
 
-  function handleSubmit(e) {
-    e.preventDefault();
-
+  // new code for handleSubmit() use from the useForm way
+  const onSubmit = handleSubmit((data) => {
     if (params.id) {
-      console.log(params.id);
-      updateTask(params.id, task);
+      updateTask(params.id, data);
     } else {
-      createTask(task.title, task.description);
+      createTask(data.title, data.description);
     }
-
     router.push("/");
-  }
+  });
 
   useEffect(() => {
     if (params.id) {
       const taskFound = tasks.find((task) => task.id === params.id);
       if (taskFound) {
-        setTask({
-          title: taskFound.title,
-          description: taskFound.description,
-        });
+        /* removed to receive the arguments from useForm way*/
+        // setTask({
+        //   title: taskFound.title,
+        //   description: taskFound.description,
+        // }); 
+        /* like this*/
+        setValue('title', taskFound.title)
+        setValue('description', taskFound.description)
       }
     }
   }, []);
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={onSubmit}>
         <input
-          name="title"
           placeholder="Write a title"
-          onChange={handleChange}
-          value={task.title}
+          {...register("title", { required: true })}
         />
+        {errors.title && (
+          <span>
+            This field is required
+          </span>
+        )}
+
         <textarea
-          name="description"
           placeholder="Write a description"
-          onChange={handleChange}
-          value={task.description}
+          {...register("description", { required: true })}
         />
+        {errors.description && (
+          <span>
+            This field is required
+          </span>
+        )}
+
         <button>Save</button>
       </form>
     </>
