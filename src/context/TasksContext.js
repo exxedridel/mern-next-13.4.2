@@ -1,6 +1,7 @@
 "use client";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext } from "react";
 import { v4 as uuid } from "uuid";
+import { useLocalStorage } from "../hooks/useLocalstorage";
 
 export const TaskContext = createContext();
 
@@ -21,20 +22,9 @@ export const TaskProvider = ({ children }) => {
   //   return [];
   // });
 
-  /* for NextJs since server side dont recognize localStorage*/
-  const [tasks, setTasks] = useState([]);
-
-  useEffect(() => {
-    const item = localStorage.getItem("tasks");
-    const tasks = JSON.parse(item);
-    if (tasks.length > 0) {
-      setTasks(tasks);
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, [tasks]);
+  /* for NextJs since server side dont recognize localStorage (to avoid warning)*/
+  // -Code is in useLocalStorage hook file, for reuse and better abstraction 
+  const [tasks, setTasks] = useLocalStorage("tasks", []);
 
   function createTask(title, description) {
     setTasks([
