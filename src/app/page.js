@@ -1,10 +1,16 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+import { useTasks } from "@/context/TasksContext";
+import TaskCard from "@/components/TaskCard";
 
 export default function Home() {
+  const { tasks } = useTasks();
+  console.log(tasks);
+
   return (
     <>
-      <h1>Home Page</h1>
+      {tasks.map((task) => (
+        <TaskCard key={task.id} task={task} />
+      ))}
     </>
   );
 }
