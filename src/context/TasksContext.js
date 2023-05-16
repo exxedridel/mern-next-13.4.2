@@ -40,6 +40,11 @@ export const TaskProvider = ({ children }) => {
     ]);
   }
 
+  function deleteTask(id) {
+    // set tasks state to a new array of task with out the taks of the passed id
+    setTasks([...tasks.filter((task) => task.id !== id)]);
+  }
+
   return (
     <TaskContext.Provider
       value={{
@@ -50,6 +55,7 @@ export const TaskProvider = ({ children }) => {
         // name of value: function
         // or just (for short)
         createTask,
+        deleteTask,
       }}
     >
       {children}
