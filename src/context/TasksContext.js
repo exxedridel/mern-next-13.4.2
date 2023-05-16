@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
 
 export const TaskContext = createContext();
@@ -11,7 +11,30 @@ export const useTasks = () => {
 };
 
 export const TaskProvider = ({ children }) => {
+  /* for react only*/
+  //  const [tasks, setTasks] = useState(() => {
+  //   const item = localStorage.getItem("tasks");
+  //   const tasks = JSON.parse(item);
+  //   if (task.lenght > 0) {
+  //     return tasks;
+  //   }
+  //   return [];
+  // });
+
+  /* for NextJs since server side dont recognize localStorage*/
   const [tasks, setTasks] = useState([]);
+
+  useEffect(() => {
+    const item = localStorage.getItem("tasks");
+    const tasks = JSON.parse(item);
+    if (tasks.length > 0) {
+      setTasks(tasks);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
 
   function createTask(title, description) {
     setTasks([

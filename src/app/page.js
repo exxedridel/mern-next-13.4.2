@@ -4,7 +4,6 @@ import TaskCard from "@/components/TaskCard";
 
 export default function Home() {
   const { tasks } = useTasks();
-  console.log(tasks);
 
   return (
     <>
