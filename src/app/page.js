@@ -6,10 +6,12 @@ export default function Home() {
   const { tasks } = useTasks();
 
   return (
-    <>
-      {tasks.map((task) => (
-        <TaskCard key={task.id} task={task} />
-      ))}
-    </>
+    <div className="flex justify-center">
+      <div className="w-7/12">
+        {tasks.map((task) => (
+          <TaskCard key={task.id} task={task} />
+        ))}
+      </div>
+    </div>
   );
 }

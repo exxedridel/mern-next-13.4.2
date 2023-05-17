@@ -1,11 +1,9 @@
 import { TaskProvider } from "@/context/TasksContext";
-import { Navbar } from "@/components/Navbar";
-import { Inter } from "next/font/google";
 // import { Toaster } from "./Toaster";
 import { Toaster } from "react-hot-toast";
+import { Navbar } from "@/components/Navbar";
+import { Layout } from "@/components/Layout";
 import "./globals.css";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: "Create Next App",
@@ -15,11 +13,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body>
         <TaskProvider>
           <Navbar />
-          {children}
-          <Toaster/>
+          <Layout>{children}</Layout>
+          <Toaster />
         </TaskProvider>
       </body>
     </html>
