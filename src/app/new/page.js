@@ -3,12 +3,18 @@ import { useEffect, useState } from "react";
 import { useTasks } from "@/context/TasksContext";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { Toast, toast } from "react-hot-toast";
 
 export default function Page({ params }) {
   // removed task empty state, now called from useLocalstorage hook
   const { tasks, createTask, updateTask } = useTasks();
   const router = useRouter();
-  const { register, handleSubmit, setValue, formState: {errors} } = useForm();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm();
 
   // removed handleChange() not used in the useForm way
 
@@ -16,8 +22,10 @@ export default function Page({ params }) {
   const onSubmit = handleSubmit((data) => {
     if (params.id) {
       updateTask(params.id, data);
+      toast.success("task updated successfully");
     } else {
       createTask(data.title, data.description);
+      toast.success("task created successfully");
     }
     router.push("/");
   });
@@ -30,10 +38,10 @@ export default function Page({ params }) {
         // setTask({
         //   title: taskFound.title,
         //   description: taskFound.description,
-        // }); 
+        // });
         /* like this*/
-        setValue('title', taskFound.title)
-        setValue('description', taskFound.description)
+        setValue("title", taskFound.title);
+        setValue("description", taskFound.description);
       }
     }
   }, []);
@@ -45,21 +53,13 @@ export default function Page({ params }) {
           placeholder="Write a title"
           {...register("title", { required: true })}
         />
-        {errors.title && (
-          <span>
-            This field is required
-          </span>
-        )}
+        {errors.title && <span>This field is required</span>}
 
         <textarea
           placeholder="Write a description"
           {...register("description", { required: true })}
         />
-        {errors.description && (
-          <span>
-            This field is required
-          </span>
-        )}
+        {errors.description && <span>This field is required</span>}
 
         <button>Save</button>
       </form>
